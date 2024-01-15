@@ -31,12 +31,6 @@ class MovieListFragment : Fragment() {
         }
 
     private val movieListViewModel: MovieListViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -59,6 +53,7 @@ class MovieListFragment : Fragment() {
         return binding.root
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.lifecycleScope.launch {
@@ -74,13 +69,21 @@ class MovieListFragment : Fragment() {
                             Log.d(TAG,"Fire delete from delete list")
                         }
                     }
-
+                    if(movies.isEmpty()){
+                        binding.imgText.visibility = View.VISIBLE
+                        binding.serviceImg.visibility = View.VISIBLE
+                    }
+                    else{
+                        binding.imgText.visibility = View.GONE
+                        binding.serviceImg.visibility = View.GONE
+                    }
 
                 }
 
             }
         }
     }
+
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -73,9 +74,16 @@ class MovieAddFragment: Fragment() {
             }
 
             searchBtn.setOnClickListener {
-                findNavController().navigate(
-                    MovieAddFragmentDirections.searchMovie(movieTitle.text.toString(),movieYear.text.toString())
-                )
+                if(binding.movieTitle.text.toString()==""){
+                    val toast=Toast.makeText(context,"For Search Enter The Movie Title",Toast.LENGTH_SHORT)
+                    toast.show()
+                }
+                else{
+                    findNavController().navigate(
+                        MovieAddFragmentDirections.searchMovie(movieTitle.text.toString(),movieYear.text.toString())
+                    )
+                }
+
             }
 
         }

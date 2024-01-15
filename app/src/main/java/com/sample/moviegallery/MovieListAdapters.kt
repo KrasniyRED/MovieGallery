@@ -13,7 +13,7 @@ class MovieSearchHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(movieItem: MovieItem, onMovieClicked: (movie:MovieItem) ->Unit) {
         binding.imageView.load(movieItem.poster){
-        //TODO Add Placeholder
+
 
         }
         binding.root.setOnClickListener {
@@ -30,12 +30,11 @@ class MovieListHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(movieItem: MovieItem,onCheckChange:(movie:MovieItem,state:Boolean)->Unit) {
         binding.imageView.load(movieItem.poster){
-        //TODO Add Placeholder
+
 
         }
         binding.movieTitle.text = movieItem.title
         binding.movieYear.text = movieItem.year
-        //TODO Add listener for checkbox
         binding.deleteCheck.setOnCheckedChangeListener { _, isChecked ->
             onCheckChange(movieItem,isChecked)
         }
