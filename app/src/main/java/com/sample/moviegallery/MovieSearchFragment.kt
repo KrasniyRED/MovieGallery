@@ -89,6 +89,12 @@ class MovieSearchFragment : Fragment() {
 
 
                     }
+                    if(items.isEmpty()){
+                        binding.serviceText.visibility = View.VISIBLE
+                    }
+                    else{
+                        binding.serviceText.visibility = View.GONE
+                    }
                 }
             }
         }

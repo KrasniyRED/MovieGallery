@@ -9,6 +9,7 @@ interface OmdBApi {
     suspend fun searchMovies(
         @Query("apikey") apiKey: String,
         @Query("s") title: String,
-        @Query("y") year: String?
+        @Query("y") year: String?,
+        @Query("t") type: String="movie"
     ): Response<MovieResponse>
 }
