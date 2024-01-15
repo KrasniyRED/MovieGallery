@@ -1,20 +1,31 @@
 package com.sample.moviegallery
 
 import android.content.Context
+import androidx.room.Room
 import com.sample.moviegallery.api.MovieItem
 import com.sample.moviegallery.api.OmdBApi
+import com.sample.todolistapp.database.MovieDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.flow.Flow
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
 
-
+private const val DATABASE_NAME = "movie-database"
 class MovieRepository private constructor(
     context: Context,
     private val coroutineScope: CoroutineScope = GlobalScope
 ){
     private val omdBApi: OmdBApi
+
+    private val database: MovieDatabase = Room
+        .databaseBuilder(
+            context.applicationContext,
+            MovieDatabase::class.java,
+            DATABASE_NAME
+        )
+        .build()
 
     init {
         val retrofit = Retrofit.Builder()
@@ -37,6 +48,12 @@ class MovieRepository private constructor(
 
         println("Unsuccessful response. Code: ${response.code()}")
         return emptyList()
+    }
+
+    fun getMovies(): Flow<List<MovieItem>> = database.movieDao().getMovies()
+
+    suspend fun addMovie(movie: MovieItem) {
+        database.movieDao().addMovie(movie)
     }
 
 

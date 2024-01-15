@@ -26,21 +26,13 @@ class MovieAddViewModel : ViewModel() {
         }
     }
 
-
-//    var movie = MovieItem(
-//        imdbID = "",
-//        title = "",
-//        year = "",
-//        poster = ""
-//    )
-
     fun updateMovie(onUpdate: (MovieItem) -> MovieItem) {
         _movie.update { oldMovieItem ->
             oldMovieItem?.let { onUpdate(it) }
         }
     }
 
-
-
-
+    suspend fun addMovie() {
+        movie.value?.let { movieRepository.addMovie(it) }
+    }
 }

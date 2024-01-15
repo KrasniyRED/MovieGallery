@@ -16,6 +16,7 @@ import androidx.navigation.fragment.navArgs
 import coil.load
 import com.sample.moviegallery.api.MovieItem
 import com.sample.moviegallery.databinding.FragmentMovieAddBinding
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.util.Date
 
@@ -60,7 +61,15 @@ class MovieAddFragment: Fragment() {
                     title = bundle.getSerializable(MovieSearchFragment.SEARCHED_TITLE_KEY_DATE) as String,
                     year = bundle.getSerializable(MovieSearchFragment.SEARCHED_YEAR_KEY_DATE) as String,
                     poster = bundle.getSerializable(MovieSearchFragment.SEARCHED_POSTER_KEY_DATE) as String) }
-                
+                addToDb.setOnClickListener {
+                    viewLifecycleOwner.lifecycleScope.launch{
+                        movieAddViewModel.addMovie()
+                    }
+                    findNavController().navigate(
+                        MovieAddFragmentDirections.saveMovie())
+
+                }
+
             }
 
             searchBtn.setOnClickListener {
