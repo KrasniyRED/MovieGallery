@@ -17,6 +17,11 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import android.content.res.Configuration
+import android.view.Display
+import android.view.WindowManager
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.recyclerview.widget.GridLayoutManager
 import com.sample.moviegallery.databinding.FragmentMovieSearchBinding
 import kotlinx.coroutines.launch
 
@@ -47,9 +52,23 @@ class MovieSearchFragment : Fragment() {
     ): View {
         _binding =
             FragmentMovieSearchBinding.inflate(inflater, container, false)
-        binding.SearchList.layoutManager = LinearLayoutManager(context)//TODO Change layout manager if app in album orientation
+        binding.SearchList.layoutManager = LinearLayoutManager(context)
         return binding.root
     }
+
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            // При портретном ориентации используйте LinearLayoutManager
+            binding.SearchList.layoutManager = LinearLayoutManager(context)
+        } else if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            // При пейзажном ориентации используйте GridLayoutManager
+            binding.SearchList.layoutManager = GridLayoutManager(context,2)
+        }
+
+}
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.lifecycleScope.launch {

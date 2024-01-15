@@ -56,6 +56,10 @@ class MovieRepository private constructor(
         database.movieDao().addMovie(movie)
     }
 
+    suspend fun deleteMovies(movies:List<MovieItem>){
+        database.movieDao().deleteMovies(movies)
+    }
+
 
 
     companion object {

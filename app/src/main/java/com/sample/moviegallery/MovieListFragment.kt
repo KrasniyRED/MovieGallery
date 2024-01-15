@@ -2,10 +2,12 @@ package com.sample.moviegallery
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isEmpty
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -18,6 +20,7 @@ import com.sample.moviegallery.api.MovieItem
 import com.sample.moviegallery.databinding.FragmentMovieListBinding
 import kotlinx.coroutines.launch
 
+private const val TAG = "MovieListFragment"
 class MovieListFragment : Fragment() {
 
     private var _binding: FragmentMovieListBinding? = null
@@ -27,7 +30,7 @@ class MovieListFragment : Fragment() {
             "Cannot access binding because it is null. Is the view visible?"
         }
 
-    private val tasksListViewModel: MovieListViewModel by viewModels()
+    private val movieListViewModel: MovieListViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +50,11 @@ class MovieListFragment : Fragment() {
                 MovieListFragmentDirections.addMovie()
             )
         }
+        binding.deleteButton.setOnClickListener {
+            viewLifecycleOwner.lifecycleScope.launch {
+                movieListViewModel.deleteMovies()
+            }
+        }
 
         return binding.root
     }
@@ -55,10 +63,21 @@ class MovieListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                tasksListViewModel.tasks.collect { tasks ->
-                    binding.movieList.adapter = MovieListAdapter(tasks)
+                movieListViewModel.movies.collect { movies ->
+                    binding.movieList.adapter = MovieListAdapter(movies){movie,state->
+                        if(state){
+                            movieListViewModel.addToDelete(movie)
+                            Log.d(TAG,"Fire add to delete list")
+                        }
+                        else{
+                            movieListViewModel.deleteFromDelete(movie)
+                            Log.d(TAG,"Fire delete from delete list")
+                        }
+                    }
+
 
                 }
+
             }
         }
     }

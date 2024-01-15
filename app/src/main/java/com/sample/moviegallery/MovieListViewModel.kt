@@ -13,8 +13,10 @@ class MovieListViewModel : ViewModel() {
     private val movieRepository = MovieRepository.get()
 
     private val _movies: MutableStateFlow<List<MovieItem>> = MutableStateFlow(emptyList())
-    val tasks: StateFlow<List<MovieItem>>
+    val movies: StateFlow<List<MovieItem>>
         get() = _movies.asStateFlow()
+    private var moviesOnDelete:MutableList<MovieItem> = mutableListOf()
+
 
     init {
         viewModelScope.launch {
@@ -22,6 +24,18 @@ class MovieListViewModel : ViewModel() {
                 _movies.value = it
             }
         }
+    }
+
+    fun addToDelete(movies:MovieItem){
+        moviesOnDelete.add(movies)
+    }
+
+    fun deleteFromDelete(movies:MovieItem){
+        moviesOnDelete.remove(movies)
+    }
+
+    suspend fun deleteMovies(){
+        movieRepository.deleteMovies(moviesOnDelete)
     }
 
 

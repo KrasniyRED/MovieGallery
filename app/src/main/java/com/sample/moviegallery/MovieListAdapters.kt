@@ -28,7 +28,7 @@ class MovieSearchHolder(
 class MovieListHolder(
     private val binding: MovieListItemBinding,
 ) : RecyclerView.ViewHolder(binding.root) {
-    fun bind(movieItem: MovieItem) {
+    fun bind(movieItem: MovieItem,onCheckChange:(movie:MovieItem,state:Boolean)->Unit) {
         binding.imageView.load(movieItem.poster){
         //TODO Add Placeholder
 
@@ -36,6 +36,9 @@ class MovieListHolder(
         binding.movieTitle.text = movieItem.title
         binding.movieYear.text = movieItem.year
         //TODO Add listener for checkbox
+        binding.deleteCheck.setOnCheckedChangeListener { _, isChecked ->
+            onCheckChange(movieItem,isChecked)
+        }
 
     }
 }
@@ -62,6 +65,7 @@ class MovieSearchAdapter(
 
 class MovieListAdapter(
     private val movieItems: List<MovieItem>,
+    private val onCheckChange:(movie:MovieItem,state:Boolean)->Unit
 ) : RecyclerView.Adapter<MovieListHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -73,7 +77,7 @@ class MovieListAdapter(
     }
     override fun onBindViewHolder(holder: MovieListHolder, position: Int) {
         val item = movieItems[position]
-        holder.bind(item)
+        holder.bind(item,onCheckChange)
     }
     override fun getItemCount() = movieItems.size
 }
