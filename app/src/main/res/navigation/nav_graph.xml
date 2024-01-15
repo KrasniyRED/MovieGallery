@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/movieSearchFragment">
+    app:startDestination="@id/movieAddFragment">
 
     <fragment
         android:id="@+id/movieListFragment"
@@ -40,7 +40,11 @@
             android:id="@+id/apply_searched"
             app:destination="@id/movieAddFragment" />
         <argument
-            android:name="searchQuery"
+            android:name="searchTitle"
             app:argType="string" />
+        <argument
+            android:name="searchYear"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 </navigation>

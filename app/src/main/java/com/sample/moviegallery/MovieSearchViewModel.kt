@@ -2,6 +2,7 @@ package com.sample.moviegallery
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.sample.moviegallery.api.MovieItem
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -10,7 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 private const val TAG = "MovieSearchViewModel"
-class MovieSearchViewModel : ViewModel() {
+class MovieSearchViewModel(searchTitle:String,searchYear:String?) : ViewModel() {
     private val movieRepository = MovieRepository.get()
     private val _movieItems: MutableStateFlow<List<MovieItem>> =
         MutableStateFlow(emptyList())
@@ -19,7 +20,7 @@ class MovieSearchViewModel : ViewModel() {
     init {
         viewModelScope.launch {
             try {
-                val items = searchPhotos("fast","")
+                val items = searchPhotos(searchTitle,searchYear)
                 _movieItems.value = items
             } catch (ex: Exception) {
                 Log.e(TAG, "Failed to load films", ex)
@@ -30,4 +31,12 @@ class MovieSearchViewModel : ViewModel() {
         return movieRepository.searchMovies(title, year)
     }
 
+}
+class MovieSearchViewModelFactory(
+    private val searchTitle:String,
+    private val searchYear:String?
+) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return MovieSearchViewModel(searchTitle,searchYear) as T
+    }
 }
